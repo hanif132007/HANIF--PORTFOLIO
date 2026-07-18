@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanif Shaik | Professional Engineering Portfolio</title>
+
+    <!-- Critical SEO Meta Tags -->
+    <meta name="description" content="Welcome to the professional portfolio of Hanif Shaik. Explore my web development work, accessibility expertise, and contact information.">
+    <link rel="canonical" href="https://example.com/">
+
+    <style>
+        /* CSS resets and accessibility-first baseline layouts */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+        }
+
+        /* Skip Link for screen readers and keyboard-only users */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            background: #005a9c;
+            color: #fff;
+            padding: 10px 20px;
+            z-index: 100;
+            text-decoration: none;
+            font-weight: bold;
+            transition: top 0.2s ease;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Highly visible keyboard focus indicators matching WCAG 2.1 AA */
+        nav a:focus, button:focus, input:focus, textarea:focus {
+            outline: 3px solid #005a9c;
+            outline-offset: 2px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #005a9c;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin: 3rem 0;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 0.25rem;
+        }
+
+        input, textarea {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #767676;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #005a9c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            max-width: 200px;
+        }
+
+        button:hover {
+            background-color: #004070;
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 1rem;
+            border-top: 2px solid #333;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Accessible Navigation Skip Anchor -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Structural Header Landmark -->
+<header role="banner">
+    <h1>Hanif Shaik</h1>
+    <p>Frontend Engineer & Accessibility Specialist</p>
+
+    <nav aria-label="Main Navigation">
+        <ul>
+            <li><a href="#about-section">About</a></li>
+            <li><a href="#projects-section">Featured Work</a></li>
+            <li><a href="#contact-section">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Core Content Landmark Container -->
+<main id="main-content">
+
+    <!-- About Section with standard label pairing -->
+    <section id="about-section" aria-labelledby="about-heading">
+        <h2 id="about-heading">About Me</h2>
+        <p>I build high-performance, inclusive web applications adhering strictly to modern semantic HTML5 and WCAG guidelines.</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects-section" aria-labelledby="featured-heading">
+        <h2 id="featured-heading">Featured Work</h2>
+
+        <!-- Self-contained Article landmark representing a singular unit of work -->
+        <article>
+            <h3>E-Commerce Accessibility Overhaul</h3>
+            <p>Remediated legacy codebase to meet WCAG 2.1 AA compliance, improving screen-reader compatibility and keyboard navigation mappings.</p>
+        </article>
+    </section>
+
+    <!-- Contact Section containing your Functional Form -->
+    <section id="contact-section" aria-labelledby="contact-heading">
+        <h2 id="contact-heading">Contact Me</h2>
+
+        <p>Give me a call directly at: <a href="tel:+917842249204" aria-label="Call Hanif Shaik at 7842249204">7842249204</a></p>
+        <p>Or fill out the form below, and I will get back to you within two business days.</p>
+
+        <!-- Formspree Endpoint Integrated Below -->
+        <form action="https://formspree.io/f/xykrwgee" method="POST">
+
+            <!-- Field 1: Text Input with explicit label linking via 'for' attribute -->
+            <div class="form-group">
+                <label for="user-name">Full Name</label>
+                <input type="text" id="user-name" name="name" required autocomplete="name">
+            </div>
+
+            <!-- Field 2: Email input utilizing aria-describedby for inline user hints -->
+            <div class="form-group">
+                <label for="user-email">Email Address</label>
+                <span id="email-hint" class="hint">Format: name@example.com</span>
+                <input type="email" id="user-email" name="email" required autocomplete="email" aria-describedby="email-hint">
+            </div>
+
+            <!-- Field 3: Textarea for descriptive text blocks -->
+            <div class="form-group">
+                <label for="user-message">Message</label>
+                <textarea id="user-message" name="message" rows="5" required></textarea>
+            </div>
+
+            <!-- Native button is naturally tab-navigable across all user devices -->
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+</main>
+
+<!-- Global Footer Landmark -->
+<footer role="contentinfo">
+    <p>&copy; 2026 Hanif Shaik. All rights reserved. | Phone: <a href="tel:+917842249204" aria-label="Call Hanif Shaik at 7842249204">7842249204</a></p>
+</footer>
+
+</body>
+</html>
