@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hanif Shaik | Advanced Responsive Portfolio</title>
-    <meta name="description" content="Welcome to the responsive engineering portfolio of Hanif Shaik. Built with CSS Grid, Flexbox architectures, and dark mode thematic variants.">
-    <link rel="canonical" href="https://example.com/">
-
+    <meta name="description" content="Welcome to the responsive engineering portfolio of Hanif Shaik. Built with CSS Grid, Flexbox architectures, dynamic JavaScript application logic, and storage hooks.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,12 +15,13 @@
     <div class="header-container">
         <div>
             <h1>Hanif Shaik</h1>
-            <p class="subtitle">Frontend Engineer & Responsive System Architect</p>
+            <p class="subtitle">Frontend Engineer & Asynchronous Systems Architect</p>
         </div>
         <nav aria-label="Main Navigation">
             <ul>
                 <li><a href="#about-section">About</a></li>
-                <li><a href="#projects-section">Projects</a></li>
+                <li><a href="#todo-section">Tasks</a></li>
+                <li><a href="#weather-section">Weather App</a></li>
                 <li><a href="#contact-section">Contact</a></li>
             </ul>
         </nav>
@@ -32,19 +31,48 @@
 <main id="main-content">
     <div class="grid-layout">
 
+        <!-- Card 1: About Panel -->
         <section id="about-section" class="card" aria-labelledby="about-heading">
-            <h2 id="about-heading">About Me</h2>
-            <p>I transform semantic layouts into high-performance, pixel-perfect, and exceptionally responsive web applications using clean architecture patterns.</p>
+            <h2 id="about-heading">Engineering Focus</h2>
+            <p>I build lightweight, high-performance web applications using robust modular frontend components, managing async network cycles effectively on the client.</p>
         </section>
 
-        <section id="projects-section" class="card" aria-labelledby="featured-heading">
-            <h2 id="featured-heading">Featured Work</h2>
-            <article>
-                <h3>CSS Grid Dashboard Integration</h3>
-                <p>Built complex multi-column fluid structural architectures adapting cleanly across extreme device profiles without content shifting.</p>
-            </article>
+        <!-- Card 2: Interactive To-Do Module Application -->
+        <section id="todo-section" class="card" aria-labelledby="todo-heading">
+            <h2 id="todo-heading">Interactive Task Engine</h2>
+            <form id="todo-form">
+                <div class="todo-input-group">
+                    <input type="text" id="todo-input" placeholder="Type a new goal..." required aria-label="New task descriptive text">
+                    <button type="submit" id="add-btn">Add</button>
+                </div>
+            </form>
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="active">Active</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+            <ul id="todo-list" aria-label="Active goal items tracking deck"></ul>
         </section>
 
+        <!-- Card 3: Real-Time Weather Dashboard (Task 4 Core Requirement) -->
+        <section id="weather-section" class="card" aria-labelledby="weather-heading">
+            <h2 id="weather-heading">RESTful Weather Radar</h2>
+            <p class="section-desc">Fetches live meteorological updates across networks asynchronously using open stream platforms.</p>
+
+            <form id="weather-form">
+                <div class="weather-search-box">
+                    <input type="text" id="weather-input" placeholder="Enter city name... (e.g., London, Mumbai)" required aria-label="Search city weather profile">
+                    <button type="submit" id="weather-submit-btn">Search</button>
+                </div>
+            </form>
+
+            <!-- Weather output dashboard wrapper targets -->
+            <div id="weather-result-card" class="weather-result-box" aria-live="polite">
+                <p class="weather-placeholder">Enter a city location above to query live global telemetry indicators.</p>
+            </div>
+        </section>
+
+        <!-- Card 4: Contact Form Layout -->
         <section id="contact-section" class="card full-width-section" aria-labelledby="contact-heading">
             <h2 id="contact-heading">Contact Me</h2>
             <p class="contact-info">Direct Line: <a href="tel:+917842249204">7842249204</a></p>
@@ -54,18 +82,14 @@
                     <label for="user-name">Full Name</label>
                     <input type="text" id="user-name" name="name" required autocomplete="name">
                 </div>
-
                 <div class="form-group">
                     <label for="user-email">Email Address</label>
-                    <span id="email-hint" class="hint">Format: name@example.com</span>
-                    <input type="email" id="user-email" name="email" required autocomplete="email" aria-describedby="email-hint">
+                    <input type="email" id="user-email" name="email" required autocomplete="email">
                 </div>
-
                 <div class="form-group">
                     <label for="user-message">Message</label>
                     <textarea id="user-message" name="message" rows="4" required></textarea>
                 </div>
-
                 <button type="submit">Send Message</button>
             </form>
         </section>
@@ -77,5 +101,6 @@
     <p>&copy; 2026 Hanif Shaik. All rights reserved. | Tel: <a href="tel:+917842249204">7842249204</a></p>
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>
