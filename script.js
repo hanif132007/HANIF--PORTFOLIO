@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    /* --- 1. CLIENT-SIDE ROUTER ENGINE --- */
     const routeLinks = document.querySelectorAll('.route-link');
     const routerViews = document.querySelectorAll('.router-view');
 
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', () => handleRouting(window.location.hash));
     handleRouting(window.location.hash || '#catalog');
 
+    /* --- 2. ARCHITECTURE DATA LAYER --- */
     const catalogProducts = [
         { id: 1, name: "Mechanical Keyboard", price: 119.99, category: "peripherals" },
         { id: 2, name: "Wireless Pro Mouse", price: 69.50, category: "peripherals" },
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let appCartState = JSON.parse(localStorage.getItem('capstone-state-store')) || [];
     let currentFilter = 'all';
 
+    // Component Shell Declarations
     const productCatalogDeck = document.getElementById('product-catalog-deck');
     const sidebarCartList = document.getElementById('sidebar-cart-list');
     const sidebarTotalPrice = document.getElementById('sidebar-total-price');
@@ -48,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCartInterfaces();
     }
 
+    /* --- 3. COMPONENT DOM RENDER ENGINE --- */
     function renderCatalogGrid() {
         if (!productCatalogDeck) return;
         productCatalogDeck.innerHTML = '';
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (navCartCount) navCartCount.textContent = quantityAccumulator;
 
+        // Sidebar rendering logic
         if (sidebarCartList) {
             sidebarCartList.innerHTML = appCartState.length === 0
                 ? `<p class="cart-empty-message">Your bucket is empty.</p>`
@@ -96,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sidebarTotalPrice) sidebarTotalPrice.textContent = `$${financialAccumulator.toFixed(2)}`;
         }
 
+        // Main Extended Checkout routing view template
         if (mainCartTableItems) {
             if (appCartState.length === 0) {
                 mainCartTableItems.innerHTML = `<div class="main-cart-row"><p class="cart-empty-message">No items in pipeline. Add some products from the catalog.</p></div>`;
@@ -125,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /* --- 4. REACTIVE SUBSCRIPTIONS & HOOKS --- */
     if (productCatalogDeck) {
         productCatalogDeck.addEventListener('click', (e) => {
             if (!e.target.classList.contains('add-to-cart-btn')) return;
