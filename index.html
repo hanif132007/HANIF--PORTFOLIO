@@ -3,102 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hanif Shaik | Advanced Responsive Portfolio</title>
-    <meta name="description" content="Welcome to the responsive engineering portfolio of Hanif Shaik. Built with CSS Grid, Flexbox architectures, dynamic JavaScript application logic, and storage hooks.">
+    <title>Capstone Architecture Platform</title>
+    <meta name="description" content="Production-ready Capstone Deployment featuring modular architecture and client-side routing.">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<a href="#main-content" class="skip-link">Skip to main content</a>
+<a href="#main-catalog-content" class="skip-link">Skip to main content</a>
 
 <header role="banner">
     <div class="header-container">
         <div>
-            <h1>Hanif Shaik</h1>
-            <p class="subtitle">Frontend Engineer & Asynchronous Systems Architect</p>
+            <h1>Modular Catalog Engine</h1>
+            <p class="subtitle">Full-Stack Architecture & Deployment Architecture</p>
         </div>
         <nav aria-label="Main Navigation">
-            <ul>
-                <li><a href="#about-section">About</a></li>
-                <li><a href="#todo-section">Tasks</a></li>
-                <li><a href="#weather-section">Weather App</a></li>
-                <li><a href="#contact-section">Contact</a></li>
+            <ul class="nav-links">
+                <li><a href="#catalog" class="route-link active-link">Products</a></li>
+                <li><a href="#cart-view" class="route-link">Cart (<span id="nav-cart-count">0</span>)</a></li>
             </ul>
         </nav>
     </div>
 </header>
 
-<main id="main-content">
-    <div class="grid-layout">
-
-        <!-- Card 1: About Panel -->
-        <section id="about-section" class="card" aria-labelledby="about-heading">
-            <h2 id="about-heading">Engineering Focus</h2>
-            <p>I build lightweight, high-performance web applications using robust modular frontend components, managing async network cycles effectively on the client.</p>
-        </section>
-
-        <!-- Card 2: Interactive To-Do Module Application -->
-        <section id="todo-section" class="card" aria-labelledby="todo-heading">
-            <h2 id="todo-heading">Interactive Task Engine</h2>
-            <form id="todo-form">
-                <div class="todo-input-group">
-                    <input type="text" id="todo-input" placeholder="Type a new goal..." required aria-label="New task descriptive text">
-                    <button type="submit" id="add-btn">Add</button>
+<main id="main-catalog-content">
+    <!-- VIEW 1: PRODUCT CATALOG -->
+    <section id="view-catalog" class="router-view active-view" aria-labelledby="catalog-heading">
+        <div class="store-layout-grid">
+            <div class="card catalog-panel">
+                <div class="catalog-header-flex">
+                    <h2 id="catalog-heading">Hardware Repository</h2>
+                    <div class="catalog-filters">
+                        <button class="store-filter-btn active" data-category="all">All Items</button>
+                        <button class="store-filter-btn" data-category="peripherals">Peripherals</button>
+                        <button class="store-filter-btn" data-category="components">Components</button>
+                    </div>
                 </div>
-            </form>
-            <div class="filter-controls">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="active">Active</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
+                <div id="product-catalog-deck" class="product-grid-display"></div>
             </div>
-            <ul id="todo-list" aria-label="Active goal items tracking deck"></ul>
-        </section>
 
-        <!-- Card 3: Real-Time Weather Dashboard (Task 4 Core Requirement) -->
-        <section id="weather-section" class="card" aria-labelledby="weather-heading">
-            <h2 id="weather-heading">RESTful Weather Radar</h2>
-            <p class="section-desc">Fetches live meteorological updates across networks asynchronously using open stream platforms.</p>
-
-            <form id="weather-form">
-                <div class="weather-search-box">
-                    <input type="text" id="weather-input" placeholder="Enter city name... (e.g., London, Mumbai)" required aria-label="Search city weather profile">
-                    <button type="submit" id="weather-submit-btn">Search</button>
+            <!-- SIDEBAR OVERVIEW -->
+            <div class="card cart-sidebar-summary">
+                <h3>Summary</h3>
+                <div id="sidebar-cart-list">
+                    <p class="cart-empty-message">Your bucket is empty.</p>
                 </div>
-            </form>
-
-            <!-- Weather output dashboard wrapper targets -->
-            <div id="weather-result-card" class="weather-result-box" aria-live="polite">
-                <p class="weather-placeholder">Enter a city location above to query live global telemetry indicators.</p>
+                <div class="sidebar-total-line">
+                    <span>Subtotal:</span>
+                    <span id="sidebar-total-price">$0.00</span>
+                </div>
+                <a href="#cart-view" class="go-to-cart-btn-link">Proceed to Checkout</a>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Card 4: Contact Form Layout -->
-        <section id="contact-section" class="card full-width-section" aria-labelledby="contact-heading">
-            <h2 id="contact-heading">Contact Me</h2>
-            <p class="contact-info">Direct Line: <a href="tel:+917842249204">7842249204</a></p>
+    <!-- VIEW 2: CHECKOUT HUB -->
+    <section id="view-cart-view" class="router-view" aria-labelledby="cart-view-heading">
+        <div class="card full-cart-card">
+            <h2 id="cart-view-heading">Checkout Management Pipeline</h2>
+            <p class="section-desc">Review your modules before executing deployment compilation scripts.</p>
 
-            <form action="https://formspree.io/f/xykrwgee" method="POST">
-                <div class="form-group">
-                    <label for="user-name">Full Name</label>
-                    <input type="text" id="user-name" name="name" required autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label for="user-email">Email Address</label>
-                    <input type="email" id="user-email" name="email" required autocomplete="email">
-                </div>
-                <div class="form-group">
-                    <label for="user-message">Message</label>
-                    <textarea id="user-message" name="message" rows="4" required></textarea>
-                </div>
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
+            <div class="cart-table-container" id="main-cart-table-items"></div>
 
-    </div>
+            <div class="checkout-footer-flex">
+                <div class="final-pricing-box">
+                    <div class="price-row"><span>Selected Items:</span><span id="checkout-total-items">0</span></div>
+                    <div class="price-row master-total"><span>Total Cost:</span><span id="checkout-total-price">$0.00</span></div>
+                </div>
+                <button id="final-checkout-btn" class="checkout-btn" disabled>Confirm Transaction</button>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer role="contentinfo">
-    <p>&copy; 2026 Hanif Shaik. All rights reserved. | Tel: <a href="tel:+917842249204">7842249204</a></p>
+    <p>&copy; 2026 Production Architecture Portfolio. Ready for deployment on Vercel, Netlify, or Render.</p>
 </footer>
 
 <script src="script.js"></script>

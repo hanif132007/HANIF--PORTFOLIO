@@ -1,176 +1,183 @@
-/* ==========================================================================
-   MODULE 1: TASK STATE MANAGER
-   ========================================================================== */
-let todos = JSON.parse(localStorage.getItem('portfolio-todos')) || [
-    { id: 1, text: "Build semantic portfolio layout", completed: true },
-    { id: 2, text: "Implement fluid responsive CSS Grid styles", completed: true },
-    { id: 3, text: "Master dynamic DOM manipulation with JavaScript", completed: true }
-];
-let currentFilter = 'all';
+document.addEventListener('DOMContentLoaded', () => {
 
-const todoForm = document.getElementById('todo-form');
-const todoInput = document.getElementById('todo-input');
-const todoList = document.getElementById('todo-list');
-const filterButtons = document.querySelectorAll('.filter-btn');
+    const routeLinks = document.querySelectorAll('.route-link');
+    const routerViews = document.querySelectorAll('.router-view');
 
-function saveToLocalStorage() {
-    localStorage.setItem('portfolio-todos', JSON.stringify(todos));
-}
+    function handleRouting(targetHash) {
+        const activeRoute = targetHash ? targetHash.replace('#', '') : 'catalog';
 
-function renderTodos() {
-    if (!todoList) return;
-    todoList.innerHTML = '';
+        routerViews.forEach(view => view.classList.remove('active-view'));
+        routeLinks.forEach(link => link.classList.remove('active-link'));
 
-    const filteredTodos = todos.filter(todo => {
-        if (currentFilter === 'active') return !todo.completed;
-        if (currentFilter === 'completed') return todo.completed;
-        return true;
-    });
+        const displayTarget = document.getElementById(`view-${activeRoute}`);
+        const navTarget = document.querySelector(`a[href="#${activeRoute}"]`);
 
-    if (filteredTodos.length === 0) {
-        todoList.innerHTML = `<li class="empty-state">No tasks found.</li>`;
-        return;
+        if (displayTarget) displayTarget.classList.add('active-view');
+        if (navTarget) navTarget.classList.add('active-link');
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    filteredTodos.forEach(todo => {
-        const li = document.createElement('li');
-        li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
-        li.dataset.id = todo.id;
-        li.innerHTML = `
-      <div class="todo-item-left">
-        <input type="checkbox" ${todo.completed ? 'checked' : ''} aria-label="Toggle status">
-        <span class="todo-text" contenteditable="true">${todo.text}</span>
-      </div>
-      <button class="delete-btn" aria-label="Delete">&times;</button>
-    `;
-        todoList.appendChild(li);
-    });
-}
+    window.addEventListener('hashchange', () => handleRouting(window.location.hash));
+    handleRouting(window.location.hash || '#catalog');
 
-if (todoForm) {
-    todoForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const text = todoInput.value.trim();
-        if (!text) return;
-        todos.push({ id: Date.now(), text, completed: false });
-        saveToLocalStorage();
-        renderTodos();
-        todoInput.value = '';
-    });
-}
+    const catalogProducts = [
+        { id: 1, name: "Mechanical Keyboard", price: 119.99, category: "peripherals" },
+        { id: 2, name: "Wireless Pro Mouse", price: 69.50, category: "peripherals" },
+        { id: 3, name: "2TB NVMe SSD Internal", price: 159.99, category: "components" },
+        { id: 4, name: "32GB DDR5 RAM Kit", price: 134.00, category: "components" },
+        { id: 5, name: "27\" 144Hz Gaming Monitor", price: 249.99, category: "peripherals" },
+        { id: 6, name: "Liquid CPU Cooler 240mm", price: 89.95, category: "components" }
+    ];
 
-if (todoList) {
-    todoList.addEventListener('click', (e) => {
-        const li = e.target.closest('.todo-item');
-        if (!li) return;
-        const id = Number(li.dataset.id);
-        if (e.target.type === 'checkbox') {
-            todos = todos.map(t => t.id === id ? { ...t, completed: e.target.checked } : t);
-            saveToLocalStorage();
-            renderTodos();
-        }
-        if (e.target.classList.contains('delete-btn')) {
-            todos = todos.filter(t => t.id !== id);
-            saveToLocalStorage();
-            renderTodos();
-        }
-    });
-}
+    let appCartState = JSON.parse(localStorage.getItem('capstone-state-store')) || [];
+    let currentFilter = 'all';
 
-filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFilter = btn.dataset.filter;
-        renderTodos();
-    });
-});
+    const productCatalogDeck = document.getElementById('product-catalog-deck');
+    const sidebarCartList = document.getElementById('sidebar-cart-list');
+    const sidebarTotalPrice = document.getElementById('sidebar-total-price');
+    const navCartCount = document.getElementById('nav-cart-count');
+    const mainCartTableItems = document.getElementById('main-cart-table-items');
+    const checkoutTotalItems = document.getElementById('checkout-total-items');
+    const checkoutTotalPrice = document.getElementById('checkout-total-price');
+    const finalCheckoutBtn = document.getElementById('final-checkout-btn');
+    const filterButtons = document.querySelectorAll('.store-filter-btn');
 
-/* ==========================================================================
-   MODULE 2: BULLETPROOF ASYNCHRONOUS WEATHER DASHBOARD
-   ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
-    const weatherForm = document.getElementById('weather-form');
-    const weatherInput = document.getElementById('weather-input');
-    const weatherCard = document.getElementById('weather-result-card');
+    function syncStateStorage() {
+        localStorage.setItem('capstone-state-store', JSON.stringify(appCartState));
+        renderCartInterfaces();
+    }
 
-    if (weatherForm) {
-        weatherForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    function renderCatalogGrid() {
+        if (!productCatalogDeck) return;
+        productCatalogDeck.innerHTML = '';
 
-            const cityName = weatherInput.value.trim();
-            if (!cityName) return;
+        const matchedData = catalogProducts.filter(item =>
+            currentFilter === 'all' || item.category === currentFilter
+        );
 
-            // Immediately show visual loading status feedback
-            weatherCard.innerHTML = `<div class="weather-loading">Searching networks for "${cityName}" updates...</div>`;
-            weatherCard.classList.add('active');
-
-            try {
-                // Step A: Convert city string to geographic coordinates safely
-                const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`;
-                const geoResponse = await fetch(geoUrl);
-
-                if (!geoResponse.ok) throw new Error("Could not connect to the location network server.");
-
-                const geoData = await geoResponse.json();
-
-                if (!geoData.results || geoData.results.length === 0) {
-                    throw new Error(`Location "${cityName}" not found. Try checking your spelling.`);
-                }
-
-                const { latitude, longitude, name, country } = geoData.results[0];
-
-                // Step B: Request live current telemetry matrices from the weather API engine
-                const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`;
-                const weatherResponse = await fetch(weatherUrl);
-
-                if (!weatherResponse.ok) throw new Error("Could not retrieve weather telemetry matrices.");
-
-                const weatherData = await weatherResponse.json();
-                const current = weatherData.current;
-
-                // Step C: Resolve code variants to plain language statements
-                let conditionText = "Clear Skies";
-                if (current.weather_code > 0 && current.weather_code <= 3) conditionText = "Partly Cloudy";
-                else if (current.weather_code >= 45 && current.weather_code <= 48) conditionText = "Foggy Weather";
-                else if (current.weather_code >= 51 && current.weather_code <= 67) conditionText = "Drizzle / Light Rain";
-                else if (current.weather_code >= 71 && current.weather_code <= 77) conditionText = "Snowfall Cycles";
-                else if (current.weather_code >= 80) conditionText = "Storm / Rain Showers";
-
-                // Step D: Directly compile visual elements onto application viewport card panels
-                weatherCard.innerHTML = `
-          <div class="weather-display-header">
-            <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-color);">${name}, ${country}</h3>
-            <span class="weather-status-tag">${conditionText}</span>
-          </div>
-          <div class="weather-metrics-grid" style="margin-top: 1rem;">
-            <div class="metric-block">
-              <span class="metric-label">Temperature</span>
-              <span class="metric-value">${Math.round(current.temperature_2m)}°C</span>
-            </div>
-            <div class="metric-block">
-              <span class="metric-label">Humidity</span>
-              <span class="metric-value">${current.relative_humidity_2m}%</span>
-            </div>
-            <div class="metric-block">
-              <span class="metric-label">Wind Speed</span>
-              <span class="metric-value">${current.wind_speed_10m} km/h</span>
-            </div>
-          </div>
-        `;
-
-            } catch (error) {
-                // Step E: Gracefully display any errors found during calculation runs
-                weatherCard.innerHTML = `
-          <div class="weather-error-container">
-            <span class="error-icon">⚠️</span>
-            <p class="error-message" style="margin: 0;">${error.message}</p>
-          </div>
-        `;
-            }
+        matchedData.forEach(prod => {
+            const el = document.createElement('div');
+            el.className = 'product-item-card';
+            el.innerHTML = `
+        <div>
+          <span class="prod-category-tag">${prod.category}</span>
+          <h4>${prod.name}</h4>
+        </div>
+        <div>
+          <p class="prod-price">$${prod.price.toFixed(2)}</p>
+          <button class="add-to-cart-btn" data-id="${prod.id}">Add to Cart</button>
+        </div>
+      `;
+            productCatalogDeck.appendChild(el);
         });
     }
-});
 
-// Run task framework boot sequence
-renderTodos();
+    function renderCartInterfaces() {
+        let quantityAccumulator = 0;
+        let financialAccumulator = 0;
+
+        appCartState.forEach(item => {
+            quantityAccumulator += item.quantity;
+            financialAccumulator += item.price * item.quantity;
+        });
+
+        if (navCartCount) navCartCount.textContent = quantityAccumulator;
+
+        if (sidebarCartList) {
+            sidebarCartList.innerHTML = appCartState.length === 0
+                ? `<p class="cart-empty-message">Your bucket is empty.</p>`
+                : appCartState.map(i => `
+            <div class="sidebar-cart-row">
+              <span>${i.name} (x${i.quantity})</span>
+              <span>$${(i.price * i.quantity).toFixed(2)}</span>
+            </div>
+          `).join('');
+            if (sidebarTotalPrice) sidebarTotalPrice.textContent = `$${financialAccumulator.toFixed(2)}`;
+        }
+
+        if (mainCartTableItems) {
+            if (appCartState.length === 0) {
+                mainCartTableItems.innerHTML = `<div class="main-cart-row"><p class="cart-empty-message">No items in pipeline. Add some products from the catalog.</p></div>`;
+                if (checkoutTotalItems) checkoutTotalItems.textContent = '0';
+                if (checkoutTotalPrice) checkoutTotalPrice.textContent = '$0.00';
+                if (finalCheckoutBtn) finalCheckoutBtn.disabled = true;
+                return;
+            }
+
+            if (finalCheckoutBtn) finalCheckoutBtn.disabled = false;
+            if (checkoutTotalItems) checkoutTotalItems.textContent = quantityAccumulator;
+            if (checkoutTotalPrice) checkoutTotalPrice.textContent = `$${financialAccumulator.toFixed(2)}`;
+
+            mainCartTableItems.innerHTML = appCartState.map(item => `
+        <div class="main-cart-row">
+          <div class="main-cart-details">
+            <h4>${item.name}</h4>
+            <span>$${item.price.toFixed(2)} each</span>
+          </div>
+          <div class="main-cart-actions">
+            <button class="qty-btn decrement-trigger" data-id="${item.id}">-</button>
+            <span class="qty-number">${item.quantity}</span>
+            <button class="qty-btn increment-trigger" data-id="${item.id}">+</button>
+          </div>
+        </div>
+      `).join('');
+        }
+    }
+
+    if (productCatalogDeck) {
+        productCatalogDeck.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('add-to-cart-btn')) return;
+            const targetId = Number(e.target.dataset.id);
+            const blueprint = catalogProducts.find(p => p.id === targetId);
+            const currentInstance = appCartState.find(c => c.id === targetId);
+
+            if (currentInstance) {
+                currentInstance.quantity += 1;
+            } else {
+                appCartState.push({ ...blueprint, quantity: 1 });
+            }
+            syncStateStorage();
+        });
+    }
+
+    if (mainCartTableItems) {
+        mainCartTableItems.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('qty-btn')) return;
+            const targetId = Number(e.target.dataset.id);
+            const activeReference = appCartState.find(c => c.id === targetId);
+
+            if (e.target.classList.contains('increment-trigger')) {
+                activeReference.quantity += 1;
+            } else if (e.target.classList.contains('decrement-trigger')) {
+                activeReference.quantity -= 1;
+                if (activeReference.quantity <= 0) {
+                    appCartState = appCartState.filter(c => c.id !== targetId);
+                }
+            }
+            syncStateStorage();
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.category;
+            renderCatalogGrid();
+        });
+    });
+
+    if (finalCheckoutBtn) {
+        finalCheckoutBtn.addEventListener('click', () => {
+            alert("🎉 Capstone Pipeline Notice: Project deployment system test verified successfully!");
+            appCartState = [];
+            syncStateStorage();
+            window.location.hash = '#catalog';
+        });
+    }
+
+    // Application Entry Point Bootstrap
+    renderCatalogGrid();
+    renderCartInterfaces();
+});
